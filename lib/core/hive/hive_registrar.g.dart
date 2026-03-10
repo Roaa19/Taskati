@@ -1,0 +1,16 @@
+import 'package:hive_ce/hive_ce.dart';
+import 'package:taskati/core/hive/hive_adapters.dart';
+
+extension HiveRegistrar on HiveInterface {
+  void registerAdapters() {
+    registerAdapter(TaskModelAdapter());
+    registerAdapter(UserModelAdapter());
+  }
+}
+
+extension IsolatedHiveRegistrar on IsolatedHiveInterface {
+  void registerAdapters() {
+    registerAdapter(TaskModelAdapter());
+    registerAdapter(UserModelAdapter());
+  }
+}

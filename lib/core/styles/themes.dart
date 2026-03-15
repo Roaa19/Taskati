@@ -34,10 +34,7 @@ class AppThemes {
         fontFamily: AppFonts.lexendDeca,
       ),
     ),
-    // tabBarTheme: TabBarThemeData(
-    //   labelColor: AppColors.primaryColor,
-    //   unselectedLabelColor: AppColors.secondaryColor,
-    // ),
+   
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.primaryColor,
       onSurface: AppColors.blackColor,
@@ -104,13 +101,10 @@ class AppThemes {
       hourMinuteColor: AppColors.primaryColor,
       dialBackgroundColor: AppColors.secondaryColor,
     ),
-    // tabBarTheme: TabBarThemeData(
-    //   labelColor: AppColors.primaryColor,
-    //   unselectedLabelColor: AppColors.secondaryColor,
-    // ),
+    
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.primaryColor,
-      onSurface: AppColors.backgroundColor, // text color
+      onSurface: AppColors.backgroundColor, 
     ),
     iconButtonTheme: IconButtonThemeData(
       style: IconButton.styleFrom(foregroundColor: AppColors.backgroundColor),

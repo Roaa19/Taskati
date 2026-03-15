@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:taskati/core/constants/app_images.dart';
+import 'package:taskati/core/functions/navigations.dart';
 import 'package:taskati/core/services/hive_helper.dart';
 import 'package:taskati/core/styles/colors.dart';
 import 'package:taskati/core/styles/text_styles.dart';
@@ -12,6 +13,7 @@ import 'package:taskati/core/widgets/custom_text_form_field.dart';
 import 'package:taskati/core/widgets/dialogs.dart';
 import 'package:taskati/core/widgets/main_button.dart';
 import 'package:taskati/core/widgets/tab_button.dart';
+import 'package:taskati/features/home/page/home_screen.dart';
 
 
 class CompleteProfileScreen extends StatefulWidget {
@@ -91,7 +93,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 ],
               ),
               Gap(8),
-              CustomTextFormField(controller: controller,),
+              CustomTextFormField(controller: controller),
             ],
           ),
         ),
@@ -104,7 +106,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
             if (path != null && controller.text.isNotEmpty) {
               await HiveHelper.setUserData(controller.text, path!);
               await HiveHelper.cacheData(HiveHelper.isUploadedKey, true);
-              //pushReplacement(context, const HomeScreen());
+              pushReplacement(context, const HomeScreen());
             } else if (path == null && controller.text.isNotEmpty) {
               showErrorDialog(context, 'select profile image');
             } else if (path != null && controller.text.isEmpty) {
@@ -145,6 +147,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
             right: 5,
             child: GestureDetector(
               onTap: () {
+                // show Dialog for deleting
                 showDialog(
                   context: context,
                   builder: (context) => SimpleDialog(

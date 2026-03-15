@@ -56,93 +56,86 @@ class _HomeScreenState extends State<HomeScreen> {
                 Gap(24),
                 TodayProgress(),
                 Gap(24),
-                _datePicker(),
+                DatePicker(
+                  DateTime.now().subtract(Duration(days: 10)),
+                  height: 90,
+                  initialSelectedDate: DateTime.now(),
+                  controller: controller,
+                  selectionColor: AppColors.primaryColor,
+                  selectedTextColor: AppColors.backgroundColor,
+                  dayTextStyle: TextStyles.caption2,
+                  dateTextStyle: TextStyles.title.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  monthTextStyle: TextStyles.caption2,
+                  onDateChange: (date) {
+                    setState(() {
+                      selectedDate = DateFormat('dd MMM, yyyy').format(date);
+                    });
+                  },
+                ),
                 Gap(16),
-                _filterTabs(context),
+                ButtonsTabBar(
+                  backgroundColor: AppColors.primaryColor,
+                  borderWidth: 3,
+                  borderColor: Colors.black,
+                  unselectedBackgroundColor: context.hoverColor,
+                  labelStyle: TextStyles.caption1.copyWith(
+                    color: AppColors.backgroundColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  radius: 15,
+                  unselectedLabelStyle: TextStyles.caption1.copyWith(
+                    color: context.isDarkMode
+                        ? AppColors.backgroundColor
+                        : AppColors.primaryColor,
+                  ),
+                  buttonMargin: EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 3,
+                  ),
+                  contentCenter: true,
+                  width: (MediaQuery.sizeOf(context).width - 40) / 3,
+                  tabs: [
+                    Tab(text: 'All'),
+                    Tab(text: 'In Progress'),
+                    Tab(text: 'Completed'),
+                  ],
+                ),
                 Gap(20),
-                _tasksList(),
+                Expanded(
+                  child: ValueListenableBuilder<Box<TaskModel>>(
+                    valueListenable: HiveHelper.taskBox.listenable(),
+                    builder: (context, box, child) {
+                      final List<TaskModel> dailyTasks = [];
+
+                      for (var task in box.values) {
+                        if (task.date == selectedDate) {
+                          dailyTasks.add(task);
+                        }
+                      }
+                      final inProgressTasks = dailyTasks
+                          .where((task) => !task.isCompleted)
+                          .toList();
+                      final completedTasks = dailyTasks
+                          .where((task) => task.isCompleted)
+                          .toList();
+
+                      return TabBarView(
+                        physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          TasksBuilder(tasks: dailyTasks),
+                          TasksBuilder(tasks: inProgressTasks),
+                          TasksBuilder(tasks: completedTasks),
+                        ],
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  DatePicker _datePicker() {
-    return DatePicker(
-      DateTime.now().subtract(Duration(days: 10)),
-      height: 90,
-      initialSelectedDate: DateTime.now(),
-      controller: controller,
-      selectionColor: AppColors.primaryColor,
-      selectedTextColor: AppColors.backgroundColor,
-      dayTextStyle: TextStyles.caption2,
-      dateTextStyle: TextStyles.title.copyWith(fontWeight: FontWeight.w600),
-      monthTextStyle: TextStyles.caption2,
-      onDateChange: (date) {
-        setState(() {
-          selectedDate = DateFormat('dd MMM, yyyy').format(date);
-        });
-      },
-    );
-  }
-
-  ButtonsTabBar _filterTabs(BuildContext context) {
-    return ButtonsTabBar(
-      backgroundColor: AppColors.primaryColor,
-      borderWidth: 3,
-      borderColor: Colors.black,
-      unselectedBackgroundColor: context.hoverColor,
-      labelStyle: TextStyles.caption1.copyWith(
-        color: AppColors.backgroundColor,
-        fontWeight: FontWeight.bold,
-      ),
-      radius: 15,
-      unselectedLabelStyle: TextStyles.caption1.copyWith(
-        color: context.isDarkMode
-            ? AppColors.backgroundColor
-            : AppColors.primaryColor,
-      ),
-      buttonMargin: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-      contentCenter: true,
-      width: (MediaQuery.sizeOf(context).width - 40) / 3,
-      tabs: [
-        Tab(text: 'All'),
-        Tab(text: 'In Progress'),
-        Tab(text: 'Completed'),
-      ],
-    );
-  }
-
-  Expanded _tasksList() {
-    return Expanded(
-      child: ValueListenableBuilder<Box<TaskModel>>(
-        valueListenable: HiveHelper.taskBox.listenable(),
-        builder: (context, box, child) {
-          final List<TaskModel> dailyTasks = [];
-
-          for (var task in box.values) {
-            if (task.date == selectedDate) {
-              dailyTasks.add(task);
-            }
-          }
-          final inProgressTasks = dailyTasks
-              .where((task) => !task.isCompleted)
-              .toList();
-          final completedTasks = dailyTasks
-              .where((task) => task.isCompleted)
-              .toList();
-
-          return TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              TasksBuilder(tasks: dailyTasks),
-              TasksBuilder(tasks: inProgressTasks),
-              TasksBuilder(tasks: completedTasks),
-            ],
-          );
-        },
       ),
     );
   }

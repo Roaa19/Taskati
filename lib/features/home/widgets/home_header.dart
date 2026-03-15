@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:taskati/core/constants/app_images.dart';
 import 'package:taskati/core/functions/extensions.dart';
+import 'package:taskati/core/functions/navigations.dart';
 import 'package:taskati/core/services/hive_helper.dart';
 import 'package:taskati/core/styles/text_styles.dart';
+import 'package:taskati/features/complete_profile/page/edit_ptofile_screen.dart';
 
 class HomeHeader extends StatefulWidget {
   const HomeHeader({super.key});
@@ -32,18 +34,23 @@ class _HomeHeaderState extends State<HomeHeader> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ClipOval(
-          child: path.isEmpty
-              ? Image.asset(AppImages.user, height: 50)
-              : Image.file(
-                  File(path),
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(AppImages.user, height: 50);
-                  },
-                ),
+        GestureDetector(
+          onTap: (){
+            pushTo(context, EditPtofileScreen());
+          },
+          child: ClipOval(
+            child: path.isEmpty
+                ? Image.asset(AppImages.user, height: 50)
+                : Image.file(
+                    File(path),
+                    height: 50,
+                    width: 50,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(AppImages.user, height: 50);
+                    },
+                  ),
+          ),
         ),
         const Gap(12),
         Expanded(

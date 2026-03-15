@@ -20,8 +20,3 @@ extension NavigationExtension on BuildContext {
     Navigator.push(this, MaterialPageRoute(builder: (context) => newScreen));
   }
 }
-
-
-
-// context.pushTo(screen);
-// pushTo(context, screen);

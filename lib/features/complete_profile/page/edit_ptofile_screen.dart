@@ -15,21 +15,31 @@ import 'package:taskati/core/widgets/main_button.dart';
 import 'package:taskati/core/widgets/tab_button.dart';
 import 'package:taskati/features/home/page/home_screen.dart';
 
-
-class CompleteProfileScreen extends StatefulWidget {
-  const CompleteProfileScreen({super.key});
+class EditPtofileScreen extends StatefulWidget {
+  const EditPtofileScreen({super.key});
 
   @override
-  State<CompleteProfileScreen> createState() => _CompleteProfileScreenState();
+  State<EditPtofileScreen> createState() => _EditPtofileScreenState();
 }
 
-class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
+class _EditPtofileScreenState extends State<EditPtofileScreen> {
   String? path;
   final TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    String? savedName = HiveHelper.getData(HiveHelper.nameKey);
+    controller.text = savedName ?? "";
+
+    path = HiveHelper.getData(HiveHelper.imageKey);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Complete Profile')),
+      appBar: AppBar(title: Text('Profile')),
       body: Padding(
         padding: const EdgeInsets.all(22),
         child: SingleChildScrollView(
@@ -101,7 +111,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(22, 5, 22, 30),
         child: MainButton(
-          text: 'Let\'s Start!',
+          text: 'Save',
           onPressed: () async {
             if (path != null && controller.text.isNotEmpty) {
               await HiveHelper.setUserData(controller.text, path!);
